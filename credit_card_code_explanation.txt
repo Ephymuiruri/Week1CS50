@@ -1,0 +1,60 @@
+
+Credit Card Validation Using Luhn's Algorithm in C
+
+This C program checks if a given credit card number is valid using the Luhn algorithm and identifies the card type (AMEX, VISA, or MASTERCARD).
+
+### Code Breakdown:
+
+1. **Input Collection:**
+   ```c
+   long crno = get_long("Number: ");
+   ```
+   - `get_long()` prompts the user to input a credit card number. The number is stored in the `crno` variable of type `long` since credit card numbers can be very large.
+
+2. **Luhn Algorithm Implementation:**
+   ```c
+   for (long temp = crno; temp > 0; temp /= 10, length++)
+   ```
+   - A `for` loop processes each digit of the credit card number.
+   - `temp` is initialized to `crno`, and in each iteration, the rightmost digit is extracted using `temp % 10`.
+   - The `temp` value is divided by 10 in each iteration to discard the last digit, reducing the number.
+   - The `length` variable keeps track of how many digits the card number has.
+
+3. **Alternating Digit Processing:**
+   - The loop uses `length % 2` to alternate between two actions:
+     - If the length is even, the digit is directly added to the `sum`.
+     - If the length is odd, the digit is doubled. If the result of the doubling is greater than 9, we subtract 9 to handle cases where the sum of the digits exceeds a single digit (e.g., `8 * 2 = 16` → `1 + 6 = 7`).
+
+4. **Tracking First and First Two Digits:**
+   - The first digit (`first_digit`) and the first two digits (`first_two_digits`) are stored to identify the card type at the end of the loop.
+   ```c
+   if (temp >= 10 && temp < 100) { first_two_digits = temp; }
+   if (temp < 10) { first_digit = temp; }
+   ```
+
+5. **Card Validation Check:**
+   - After processing the digits, the program checks if the total sum is divisible by 10:
+   ```c
+   if (sum % 10 == 0) { ... }
+   ```
+   - If true, the credit card number is valid according to the Luhn algorithm. Otherwise, it’s invalid.
+
+6. **Card Type Identification:**
+   - Based on the first two digits and length, the program identifies the card type:
+     - AMEX: Starts with `34` or `37` and has 15 digits.
+     - VISA: Starts with `4` and has 13 or 16 digits.
+     - MASTERCARD: Starts with numbers between `51` and `55` and has 16 digits.
+
+   If none of these conditions are met, the card is deemed invalid:
+   ```c
+   printf("INVALID
+");
+   ```
+
+### Example:
+For the input `378282246310005` (an AMEX card):
+- The Luhn checksum will verify the number as valid.
+- The first two digits are `37`, and the length is 15, so the program will output `AMEX`.
+
+### Conclusion:
+This code implements a simple and efficient way to validate credit card numbers using the Luhn algorithm while identifying major card types.
